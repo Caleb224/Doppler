@@ -1,0 +1,22 @@
+#bottom {
+	position: fixed;
+	text-align: left;
+	bottom: 0px;
+	padding-bottom: 0px;
+}
+
+.footer {
+	text-align: center;
+	bottom: 0px;
+	padding-bottom: 0px;
+}
+
+.main {
+	position: fixed;
+	text-align: center;
+	
+}
+
+
+
+
