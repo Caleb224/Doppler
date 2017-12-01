@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Required meta tags-->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <!-- Your app title -->
+    <title>My App</title>
+    <!-- Path to Framework7 iOS CSS theme styles-->
+    <link rel = "stylesheet" 
+   href = "https://cdnjs.cloudflare.com/ajax/libs/framework7/1.4.2/css/framework7.ios.min.css" />
+    <link rel = "stylesheet" href="Framework7-2.0.0-beta.17/dist/css/framework7.ios.css" />
+    <!-- Path to Framework7 iOS related color styles -->
+    <link rel = "stylesheet" 
+   href = "https://cdnjs.cloudflare.com/ajax/libs/framework7/1.4.2/css/framework7.ios.colors.min.css" />
+    <!-- Path to your custom app styles-->
+    <link rel="stylesheet" href="path/to/my-app.css">
+    <!-- Link to device speed monitor -->
+    <link href="https://github.com/apache/cordova-plugin-device-motion">
+    <!-- External Resources -->
+    <link href="font-awesome-4.7.0/css/font-awesome.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+  </head>
+  <script>
+      angular.module('ngCordova.plugins.deviceMotion', [])
+
+  .factory('$cordovaDeviceMotion', ['$q', function ($q) {
+
+    return {
+      getCurrentAcceleration: function () {
+        var q = $q.defer();
+
+        if (angular.isUndefined(navigator.accelerometer) ||
+        !angular.isFunction(navigator.accelerometer.getCurrentAcceleration)) {
+          q.reject('Device do not support watchAcceleration');
+          return q.promise;
+        }
+
+        navigator.accelerometer.getCurrentAcceleration(function (result) {
+          q.resolve(result);
+        }, function (err) {
+          q.reject(err);
+        });
+
+        return q.promise;
+      },
+
+      watchAcceleration: function (options) {
+        var q = $q.defer();
+
+        if (angular.isUndefined(navigator.accelerometer) ||
+        !angular.isFunction(navigator.accelerometer.watchAcceleration)) {
+          q.reject('Device do not support watchAcceleration');
+          return q.promise;
+        }
+
+        var watchID = navigator.accelerometer.watchAcceleration(function (result) {
+          q.notify(result);
+        }, function (err) {
+          q.reject(err);
+        }, options);
+
+        q.promise.cancel = function () {
+          navigator.accelerometer.clearWatch(watchID);
+        };
+
+        q.promise.clearWatch = function (id) {
+          navigator.accelerometer.clearWatch(id || watchID);
+        };
+
+        q.promise.watchID = watchID;
+
+        return q.promise;
+      },
+
+      clearWatch: function (watchID) {
+        return navigator.accelerometer.clearWatch(watchID);
+      }
+    };
+  }]);
+  </script>
+  <body>
+    <!-- Status bar overlay for full screen mode (PhoneGap) -->
+    <div class="statusbar-overlay"></div>
+    <!-- Panels overlay-->
+    <div class="panel-overlay"></div>
+    <!-- Left panel with reveal effect-->
+    <div class="panel panel-left panel-reveal">
+      <div class="content-block">
+        <p>Left panel content goes here</p>
+      </div>
+    </div>
+    <!-- Views -->
+    <div class="views">
+      <!-- Your main view, should have "view-main" class -->
+      <div class="view view-main layout-dark">
+        <!-- Top Navbar-->
+        <div class = "navbar">
+                     <div class = "navbar-inner">
+                        <div class = "left"></div>
+                        <div class = "center color-red">
+                        <h1 style="font-family: 'Roboto'">Doppler</h1>
+                        </div>
+                        <div class = "right">
+                        </div>
+                     </div>
+                  </div>
+        <!-- Pages container, because we use fixed-through navbar and toolbar, it has additional appropriate classes-->
+        <div class="pages navbar-through toolbar-through">
+          <!-- Page, "data-page" contains page name -->
+          <div data-page="index" class="page">
+            <!-- Scrollable page content -->
+            <div class="page-content">
+              <div class="card">
+                  <div class="card-header">
+                      <h2>Racing</h2>
+                      <div class="right">
+                          <div class="button color-green">Play</div>
+                      </div>
+                  </div>
+              </div>
+              <div class="card">
+                  <div class="card-header">
+                      <h2>Cruising</h2>
+                      <div class="right">
+                          <div class="button color-yellow">Play</div>
+                      </div>
+                  </div>
+              </div>
+              <div class="card">
+                  <div class="card-header">
+                      <h2>Traffic</h2>
+                      <div class="right">
+                          <div class="button color-red">Play</div>
+                      </div>
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Bottom Toolbar-->
+        <div class="toolbar">
+          <div class="toolbar-inner">
+            <!-- Toolbar links -->
+            <div class="right">
+                <a href="about.html" class="link">About</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Path to Framework7 Library JS-->
+    <script type="text/javascript" src="path/to/framework7.min.js"></script>
+    <!-- Path to your app js-->
+    <script type="text/javascript" src="path/to/my-app.js"></script>
+  </body>
+</html>              
